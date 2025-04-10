@@ -7,17 +7,16 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-int main()
+int mksock()
 {
-	int sock, conn, bind_r, listen_r;
+	int sock, bind_r, listen_r;
 	struct sockaddr_in addr;
-	char *hello;
 
 	/* create a socket */
 	sock = socket(PF_INET, SOCK_STREAM, 0);
 	if (sock == -1) {
 		puts("Could not create socket.");
-		return 1;
+		return -1;
 	}
 
 	/* bind the address */
@@ -28,30 +27,46 @@ int main()
 	bind_r = bind(sock, (struct sockaddr *) &addr, sizeof addr);
 	if (bind_r == -1) {
 		puts("Could not bind to local port.");
-		return 1;
+		return -1;
 	}
 
 	/* listen for connections */
 	listen_r = listen(sock, 1);
 	if (listen_r == -1) {
 		puts("Could not listen for connections.");
-		return 1;
+		return -1;
 	}
+
+	return sock;
+}
+
+void serve(int sock)
+{
+	char *hello = "Greetings!\n";
+	int conn;
 
 	/* accept a connection */
 	conn = accept(sock, NULL, NULL);
 	if (conn == -1) {
 		puts("Could not accept a connection.");
-		return 1;
+		return;
 	}
 
 	/* send some data and shutdown */
-	hello = "Greetings!\n";
-
 	write(conn, hello, strlen(hello));
-
 	close(conn);
-	close(sock);
+}
+
+int main()
+{
+	int sock;
+
+	/* setup */
+	if ((sock = mksock()) == -1)
+		return 1;
+
+	/* keep serving requests */
+	serve(sock);
 
 	return 0;
 }

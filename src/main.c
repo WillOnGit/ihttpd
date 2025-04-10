@@ -55,6 +55,7 @@ void serve(int sock)
 
 		/* send some data and shutdown */
 		write(conn, hello, strlen(hello));
+		puts("Served a request!");
 		close(conn);
 	}
 }
@@ -64,10 +65,12 @@ int main()
 	int sock;
 
 	/* setup */
+	puts("Starting server...");
 	if ((sock = mksock()) == -1)
 		return 1;
 
 	/* keep serving requests */
+	puts("Server started!");
 	serve(sock);
 
 	return 0;

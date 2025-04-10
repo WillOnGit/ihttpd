@@ -1,4 +1,5 @@
 #define	LISTEN_PORT	8666
+#define	OUTPUT_LIMIT	1024
 
 #include <stdio.h>
 #include <string.h>
@@ -6,6 +7,8 @@
 
 #include <netinet/in.h>
 #include <sys/socket.h>
+
+char outbuf[OUTPUT_LIMIT];
 
 int mksock()
 {
@@ -40,12 +43,21 @@ int mksock()
 	return sock;
 }
 
+int mkoutput()
+{
+	int len = 11;
+	char *hello = "Greetings!\n";
+
+	strcpy(outbuf, hello);
+
+	return len;
+}
+
 void serve(int sock)
 {
-	char *hello = "Greetings!\n";
-	int conn;
-
 	while (1) {
+		int conn, outlen;
+
 		/* accept a connection */
 		conn = accept(sock, NULL, NULL);
 		if (conn == -1) {
@@ -53,8 +65,11 @@ void serve(int sock)
 			return;
 		}
 
-		/* send some data and shutdown */
-		write(conn, hello, strlen(hello));
+		/* set output */
+		outlen = mkoutput();
+
+		/* send output data and close socket */
+		write(conn, outbuf, outlen);
 		puts("Served a request!");
 		close(conn);
 	}

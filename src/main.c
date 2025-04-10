@@ -45,16 +45,18 @@ void serve(int sock)
 	char *hello = "Greetings!\n";
 	int conn;
 
-	/* accept a connection */
-	conn = accept(sock, NULL, NULL);
-	if (conn == -1) {
-		puts("Could not accept a connection.");
-		return;
-	}
+	while (1) {
+		/* accept a connection */
+		conn = accept(sock, NULL, NULL);
+		if (conn == -1) {
+			puts("Could not accept a connection.");
+			return;
+		}
 
-	/* send some data and shutdown */
-	write(conn, hello, strlen(hello));
-	close(conn);
+		/* send some data and shutdown */
+		write(conn, hello, strlen(hello));
+		close(conn);
+	}
 }
 
 int main()

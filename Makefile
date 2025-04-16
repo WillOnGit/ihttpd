@@ -1,4 +1,4 @@
-.PHONY: clean serve
+.PHONY: clean connect serve
 
 all: ihttpd
 
@@ -7,6 +7,9 @@ ihttpd: src/main.c
 
 serve: ihttpd
 	./ihttpd
+
+connect:
+	@nc localhost 8666
 
 clean:
 	rm -f ihttpd

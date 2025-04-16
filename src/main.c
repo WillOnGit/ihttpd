@@ -2,7 +2,6 @@
 #define	OUTPUT_LIMIT	1024
 
 #include <stdio.h>
-#include <string.h>
 #include <unistd.h>
 
 #include <netinet/in.h>
@@ -45,11 +44,16 @@ int mksock()
 
 int mkoutput()
 {
-	int len = 11;
-	char *hello = "Greetings!\n";
+	int c, len;
 
-	strcpy(outbuf, hello);
+	len = 0;
 
+	puts("Input required! Send EOF when done...");
+	while ((c = getchar()) != EOF && len < OUTPUT_LIMIT) {
+		outbuf[len++] = c;
+	}
+
+	clearerr(stdin); /* required to read past first EOF */
 	return len;
 }
 
@@ -70,7 +74,7 @@ void serve(int sock)
 
 		/* send output data and close socket */
 		write(conn, outbuf, outlen);
-		puts("Served a request!");
+		printf("Served a request with %d bytes!\n", outlen);
 		close(conn);
 	}
 }

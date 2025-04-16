@@ -1,9 +1,9 @@
 .PHONY: clean
 
-all: main
+all: ihttpd
 
-main: src/main.c
-	cc src/main.c -o main
+ihttpd: src/main.c
+	cc src/main.c -o ihttpd
 
 clean:
-	rm -f main
+	rm -f ihttpd

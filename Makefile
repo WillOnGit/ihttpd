@@ -2,14 +2,14 @@
 
 all: ihttpd
 
-ihttpd: src/main.c
-	cc src/main.c -o ihttpd
+ihttpd: src/main.c src/http.c src/http.h
+	cc src/main.c src/http.c -o ihttpd
 
 serve: ihttpd
 	./ihttpd
 
 connect:
-	@nc localhost 8666
+	curl --ipv4 http://localhost:8666/
 
 clean:
 	rm -f ihttpd

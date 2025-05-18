@@ -7,6 +7,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
+#include "http.h"
+
 char outbuf[OUTPUT_LIMIT];
 
 int mksock()
@@ -73,7 +75,7 @@ void serve(int sock)
 		outlen = mkoutput();
 
 		/* send output data and close socket */
-		write(conn, outbuf, outlen);
+		http_res(conn, outbuf, outlen);
 		printf("Served a request with %d bytes!\n", outlen);
 		close(conn);
 	}

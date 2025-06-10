@@ -57,6 +57,7 @@ void http_res(int fd, char *body, int body_len)
 	n += snprintf(RES_BUF + n, MAX_RESPONSE - n, "Content-Length: %d\r\n", body_len);
 	n += snprintf(RES_BUF + n, MAX_RESPONSE - n, "Cache-Control: no-cache\r\n");
 	n += snprintf(RES_BUF + n, MAX_RESPONSE - n, "Connection: close\r\n");
+	n += snprintf(RES_BUF + n, MAX_RESPONSE - n, "Access-Control-Allow-Origin: *\r\n");
 
 	if (n + 2 >= MAX_RESPONSE) {
 		puts("RES_BUF full; aborting");
